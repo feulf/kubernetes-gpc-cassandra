@@ -1,9 +1,10 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+kind: StatefulSet
+apiVersion: apps/v1beta1
 metadata:
   name: cassandra
 spec:
-  replicas: 1
+  serviceName: cassandra
+  replicas: 3
   template:
     metadata:
       labels:
@@ -30,8 +31,14 @@ spec:
               name: cql
           volumeMounts:
             - mountPath: /var/lib/cassandra/data
-              name: cassandra-volume
-      volumes:
-        - name: cassandra-volume
-          persistentVolumeClaim:
-            claimName: cassandra-pvc
+              name: cassandra
+  volumeClaimTemplates:
+  - metadata:
+      name: cassandra
+      annotations:
+        volume.beta.kubernetes.io/storage-class: cassandra-storage-class
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 200Gi

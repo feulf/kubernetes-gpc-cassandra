@@ -1,7 +1,7 @@
-apiVersion: v1
 kind: PersistentVolume
+apiVersion: v1
 metadata:
-  name: cassandra-pv
+  name: cassandra-pv-0
 spec:
   capacity:
     storage: 200Gi
@@ -10,4 +10,32 @@ spec:
   storageClassName: cassandra-storage-class
   gcePersistentDisk:
     fsType: ext4
-    pdName: cassandra-disk 
+    pdName: cassandra-disk-0
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cassandra-pv-1
+spec:
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: cassandra-storage-class
+  gcePersistentDisk:
+    fsType: ext4
+    pdName: cassandra-disk-1
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cassandra-pv-2
+spec:
+  capacity:
+    storage: 200Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: cassandra-storage-class
+  gcePersistentDisk:
+    fsType: ext4
+    pdName: cassandra-disk-2
