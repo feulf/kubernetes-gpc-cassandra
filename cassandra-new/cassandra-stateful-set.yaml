@@ -1,0 +1,48 @@
+apiVersion: "apps/v1beta1"
+kind: StatefulSet
+metadata:
+  name: cassandra
+spec:
+  serviceName: cassandra
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      containers:
+        - name: cassandra
+          image: vyshane/cassandra
+          ports:
+            - containerPort: 9042
+              name: cql
+            - containerPort: 7000
+              name: intra-node
+            - containerPort: 7001
+              name: tls-intra-node
+            - containerPort: 7199
+              name: jmx
+          env:
+            - name: PEER_DISCOVERY_SERVICE
+              value: cassandra-peers
+            - name: CASSANDRA_CLUSTER_NAME
+              value: Cassandra
+            - name: CASSANDRA_DC
+              value: DC1
+            - name: CASSANDRA_RACK
+              value: Kubernetes Cluster
+            - name: CASSANDRA_ENDPOINT_SNITCH
+              value: GossipingPropertyFileSnitch
+          volumeMounts:
+            - mountPath: /cassandra_data
+              name: cassandra
+  volumeClaimTemplates:
+  - metadata:
+      name: cassandra
+      annotations:
+        volume.beta.kubernetes.io/storage-class: cassandra-storage-class
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 200Gi

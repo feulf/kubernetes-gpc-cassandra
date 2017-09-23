@@ -11,8 +11,8 @@ spec:
         app: cassandra
     spec:
       containers:
-        - image: vyshane/cassandra
-          name: cassandra
+        - name: cassandra
+          image: vyshane/cassandra
           env:
             - name: PEER_DISCOVERY_SERVICE
               value: cassandra-peers
@@ -29,6 +29,17 @@ spec:
           ports:
             - containerPort: 9042
               name: cql
+
+          ports:
+          - containerPort: 7000
+            name: intra-node
+          - containerPort: 7001
+            name: tls-intra-node
+          - containerPort: 7199
+            name: jmx
+          - containerPort: 9042
+            name: cql
+
           volumeMounts:
             - mountPath: /var/lib/cassandra/data
               name: cassandra
